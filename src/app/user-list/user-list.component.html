@@ -1,0 +1,26 @@
+<h3>All Users:</h3>
+<ul>
+  <li *ngFor="let user of users" (click)="openDialog(user)">
+    <p>{{user}}</p>
+  </li>
+</ul>
+<app-modal>
+  <div class="app-modal-header">
+    Send Private Message to: {{pmName}}
+  </div>
+  <div class="app-modal-body">
+    <input [(ngModel)]="message" >
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
+    <button type="button" class="btn btn-primary" (click)="sendPrivateMessage()">Send</button>
+  </div>
+</app-modal>
+
+
+<h5>PMS:</h5>
+<ul>
+  <!--<li *ngFor="let pmUser of pmUsers">-->
+    <!--{{pmUser.name}}-->
+  <!--</li>-->
+</ul>

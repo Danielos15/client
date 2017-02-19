@@ -1,0 +1,15 @@
+<div class="allRooms">
+  <h3>Avalible Rooms: </h3>
+  <ul>
+    <li *ngFor="let room of rooms">
+      <span class="joinRoom {{room}}" (click)="joinRoom(room)">
+        <h4>
+          {{room}}
+        </h4>
+      </span>
+    </li>
+  </ul>
+
+  <input [(ngModel)]="newRoom" (keyup.enter)=onNewRoom()>
+  <button (click)="onNewRoom()">Add new room</button>
+</div>
