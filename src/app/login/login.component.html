@@ -1,14 +1,18 @@
 <div id="loginWindow">
   <h3>Login:</h3>
   <div class="input-group input-group-lg">
-    <span class="input-group-addon" id="basic-addon1">@</span>
+    <span class="input-group-addon" id="basic-addon1"><i class="fa noClick fa-user"></i></span>
     <input [(ngModel)]="username" (keyup.enter)=onLogin() type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
-    <span class="input-group-btn">
-      <button class="btn btn-default" type="button" (click)="onLogin()">Login</button>
-    </span>
+  </div>
+  <div class="input-group input-group-lg">
+    <span class="input-group-addon" id="basic-addon2"><i class="fa noClick fa-lock"></i></span>
+    <input [(ngModel)]="password" (keyup.enter)=onLogin() type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+  </div>
+  <div class="input-group input-group-lg submit">
+      <button class="btn btn-default form-control" type="button" (click)="onLogin()">Login</button>
   </div>
 
   <div *ngIf="error">
-    Sorry Username is already in use, try another.
+    {{error}}
   </div>
 </div>

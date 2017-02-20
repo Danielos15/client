@@ -8,8 +8,9 @@ import {Router} from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  error: boolean;
+  error: string;
   username: string;
+  password: string;
 
   constructor(
     private chatService: ChatService,
@@ -17,13 +18,12 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.error = false;
   }
 
   onLogin() {
-    this.chatService.login(this.username).subscribe(succeeded => {
-      this.error = !succeeded;
-      if (succeeded) {
+    this.chatService.login(this.username, this.password).subscribe(obj => {
+      this.error = obj.reason;
+      if (obj.succeded) {
         this.router.navigate(['/chat']);
       }
     });

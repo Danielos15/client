@@ -5,17 +5,20 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class ChatService {
   socket: any;
+  pm: any;
   private currentRoom: string;
   private currentName: string;
-  private privateMessages : any;
+  private privateMessages: any;
+  private openDialogs: string[];
 
   constructor() {
-    this.socket = io('https://danielos15.eu-2.evennode.com/');
+    this.socket = io('http://localhost:8080');
     this.socket.on('connect', function() {
       console.log('Connection');
     });
 
     this.privateMessages = [];
+    this.openDialogs = [];
     this.getPrivateMessage();
   }
 
@@ -23,14 +26,17 @@ export class ChatService {
     return this.currentName;
   }
 
-  login(username: string): Observable<boolean> {
+  login(username: string, password: string): Observable<any> {
     return new Observable( observer => {
-      this.socket.emit('adduser', username, succeded => {
+      this.socket.emit('adduser', username, password, (succeded, reason) => {
         if (succeded === true) {
           this.currentName = username;
           this.updateAllUsers();
         }
-        observer.next(succeded);
+        observer.next({
+          succeded: succeded,
+          reason: reason
+        });
       });
     });
   }
@@ -46,20 +52,6 @@ export class ChatService {
           }
         }
         observer.next(strArr);
-      });
-    });
-  }
-
-  UserRoomSubscription(): Observable<string[]> {
-    return new Observable(obs => {
-      this.socket.on('userlistinroom', lst => {
-        const strArr = [];
-        for (const name in lst) {
-          if (lst.hasOwnProperty(name)) {
-            strArr.push(name);
-          }
-        }
-        obs.next(strArr);
       });
     });
   }
@@ -92,6 +84,7 @@ export class ChatService {
       });
     });
   }
+
   getUsers(): Observable<string[]> {
     return new Observable(observer => {
       this.socket.on('userlist', lst => {
@@ -99,12 +92,12 @@ export class ChatService {
       });
     });
   }
+
   updateAllUsers() {
     this.socket.emit('users');
   }
 
   addRoom(roomName: string, pass: string): Observable<boolean> {
-    // TODO: check if Room exists.
     return new Observable(observer => {
       const param = {
         room: roomName,
@@ -117,7 +110,6 @@ export class ChatService {
   }
 
   joinRoom(roomName: string, pass: string): Observable<boolean> {
-    // TODO: check if room Exists
     return this.addRoom(roomName, pass);
   }
 
@@ -154,7 +146,7 @@ export class ChatService {
   }
 
   getPrivateMessage() {
-    let obs = new Observable(obs => {
+    const Ob = new Observable(obs => {
       this.socket.on('recv_privatemsg', (username, msg) => {
         const ret = {
           sender: username,
@@ -165,13 +157,29 @@ export class ChatService {
       });
     });
 
-    obs.subscribe( obj => {
+    Ob.subscribe( obj => {
       this.privateMessages.push(obj);
-    })
+    });
   }
 
-  getPMs() {
-    return this.privateMessages;
+  addPmUser(username: string) {
+    if (this.openDialogs.indexOf(username) < 0) {
+      this.openDialogs.push(username);
+    }
+  }
+
+  getPmUsers() {
+    return this.openDialogs;
+  }
+
+  getPMs(username: string) {
+    const ret = [];
+    for (const msg of this.privateMessages) {
+      if (msg.sender === username) {
+        ret.push(msg);
+      }
+    }
+    this.pm = ret;
   }
 
   updateChat(): Observable<Object> {
@@ -190,14 +198,38 @@ export class ChatService {
     this.socket.emit('getchat', room);
   }
 
+  kick(username: string, room: string): Observable<boolean> {
+    const params = {
+      user: username,
+      room: room
+    };
+    return new Observable(obs => {
+      this.socket.emit('kick', params, success => {
+        obs.next(success);
+      });
+    });
+  }
+
+  ban(username: string, room: string): Observable<boolean> {
+    const params = {
+      user: username,
+      room: room
+    };
+    return new Observable(obs => {
+      this.socket.emit('ban', params, success => {
+        obs.next(success);
+      };
+    });
+
+  }
+
   getDateTimeFormat(d = new Date) {
-    const date: string = d.toLocaleString(window.navigator.language, {month: 'short'})
+    return d.toLocaleString(window.navigator.language, {month: 'short'})
       + '-'
       + d.getDate()
       + ' '
       + d.getHours()
       + ':'
       + d.getMinutes();
-    return date;
   }
 }

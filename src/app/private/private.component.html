@@ -1,0 +1,6 @@
+<li *ngIf="pmUsers.length > 0" class="list-group-item noHover special">
+  <h5>Private Messages</h5>
+</li>
+<li class="list-group-item" *ngFor="let pmUser of pmUsers" (click)="openPms(pmUser)">
+  {{pmUser}}
+</li>

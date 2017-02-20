@@ -1,9 +1,16 @@
 <h3>Members</h3>
 <ul class="list-group">
   <li class="list-group-item op" *ngFor="let user of ops" >
-    {{user}}
+    Op:{{user}}
+    <div *ngIf="isOp && user !== currUser" class="options">
+      <i title="kick" class="fa fa-sign-out" (click)="kick(user)"></i>
+      <i title="ban" class="fa fa-ban" (click)="ban(user)"></i>
+    </div>
   </li>
   <li class="list-group-item user" *ngFor="let user of users" >
     {{user}}
-  </li>
+    <div *ngIf="isOp && user !== currUser" class="options">
+      <i title="kick" class="fa fa-sign-out" (click)="kick(user)"></i>
+      <i title="ban" class="fa fa-ban" (click)="ban(user)"></i>
+    </div>
 </ul>

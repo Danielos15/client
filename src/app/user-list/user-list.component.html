@@ -4,31 +4,3 @@
     {{user}}
   </li>
 </ul>
-<app-modal>
-  <div class="app-modal-header">
-    Send Private Message to: {{pmName}}
-  </div>
-  <div class="app-modal-body">
-    <input [(ngModel)]="message" >
-  </div>
-  <div class="app-modal-footer">
-    <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-    <button type="button" class="btn btn-primary" (click)="sendPrivateMessage()">Send</button>
-  </div>
-</app-modal>
-
-
-<h3>Private Messages</h3>
-<ul class="list-group">
-  <li class="list-group-item noHover noPad" *ngFor="let pmUser of pmUsers">
-    <div class="message">
-      <div class="info">
-        <span class="sender">{{pmUser.sender}}</span>
-        <span class="time">{{pmUser.time}}</span>
-      </div>
-      <div class="context">
-        <div class="text">{{pmUser.msg}}</div>
-      </div>
-    </div>
-  </li>
-</ul>

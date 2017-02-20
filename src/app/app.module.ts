@@ -14,6 +14,7 @@ import { UserComponent } from './user/user.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { ModalComponent } from './modal/modal.component';
 import { PrivateMsgComponent } from './private-msg/private-msg.component';
+import { PrivateComponent } from './private/private.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,7 @@ import { PrivateMsgComponent } from './private-msg/private-msg.component';
     ChatComponent,
     UserComponent,
     UserListComponent,
-    ModalComponent,
-    PrivateMsgComponent
+    PrivateComponent
   ],
   imports: [
     BrowserModule,

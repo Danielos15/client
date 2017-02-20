@@ -10,8 +10,11 @@ import {Router} from '@angular/router';
 export class ChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   activeRoom: string;
+  activePm: string;
   message: string;
+  pMessage: string;
   chat: any;
+  pm: any;
 
   constructor(
     private chatService: ChatService,
@@ -47,6 +50,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.chat = ret;
       }
     });
+    this.pm = this.chatService.pm;
+
     this.scrollToBottom();
   }
 
@@ -71,6 +76,19 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
 
+  sendPrivateMessage() {
+    const data = {
+      nick: this.activePm,
+      message: this.pMessage
+    };
+    this.chatService.sendPrivateMessage(data).subscribe( success => {
+      if (success) {
+        this.pMessage = '';
+      }
+    });
+    this.scrollToBottom();
+  }
+
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
@@ -78,6 +96,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   scrollToBottom(): void {
     try {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } catch(err) { }
+    } catch (err) { }
   }
 }

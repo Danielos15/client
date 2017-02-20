@@ -2,7 +2,7 @@
   <h3>Rooms</h3>
   <ul class="list-group">
     <li class="list-group-item">
-      <input [(ngModel)]="newRoom" (keyup.enter)=onNewRoom()>
+      <input class="form-control" [(ngModel)]="newRoom" (keyup.enter)=onNewRoom() placeholder="New room name">
       <i (click)="onNewRoom()" class="myBtn btn btn-default fa fa-plus"> Create Room</i>
     </li>
 

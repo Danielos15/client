@@ -11,19 +11,35 @@ export class UserComponent implements OnInit {
   @Input() activeRoom: string;
   users: string[];
   ops: string[];
+  isOp: boolean;
+  currUser: string;
 
   constructor(
-    private chatService: ChatService,
-    private router: Router
+    private chatService: ChatService
   ) { }
 
   ngOnInit() {
+    this.currUser = this.chatService.getCurrentUser();
     this.chatService.getUsersInRoom().subscribe(obj => {
       if (obj.room === this.activeRoom) {
+        this.isOp = false;
         this.users = obj.users;
         this.ops = obj.ops;
+        if (this.ops.indexOf(this.chatService.getCurrentUser()) > -1) {
+          this.isOp = true;
+        }
       }
     });
+  }
+
+  kick(username: string, event: any) {
+    this.chatService.kick(username, this.activeRoom).subscribe();
+    event.stopImmediatePropagation();
+  }
+
+  ban(username: string, event: an) {
+    this.chatService.ban(username, this.activeRoom).subscribe();
+    event.stopImmediatePropagation();
   }
 
 }
