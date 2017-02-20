@@ -1,16 +1,12 @@
-<h3>Active Rooms:</h3>
-<ul>
-  <li>
-    <span class="seeRooms" (click)="seeRooms()">
-      <i>All Rooms</i>
-    </span>
+<h3>My Rooms</h3>
+<ul class="list-group">
+  <li class="list-group-item" (click)="seeRooms()">
+      All Rooms
   </li>
-  <li *ngFor="let room of activeRooms">
-    <span class="openRoom" (click)="openRoom(room)">
-      <i>{{room}}</i>
-    </span>
-    <span class="leaveRoom" (click)="leaveRoom(room)">
-      <i class="fa fa-exit">Leave room</i>
+  <li class="list-group-item" *ngFor="let room of activeRooms" (click)="openRoom(room)">
+      {{room}}
+    <span class="leaveRoom" (click)="leaveRoom(room, $event)">
+      <i class="fa icon fa-times"></i>
     </span>
   </li>
 </ul>

@@ -1,7 +1,7 @@
-<h3>All Users:</h3>
-<ul>
-  <li *ngFor="let user of users" (click)="openDialog(user)">
-    <p>{{user}}</p>
+<h3>Users</h3>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let user of users" (click)="openDialog(user)">
+    {{user}}
   </li>
 </ul>
 <app-modal>
@@ -18,9 +18,17 @@
 </app-modal>
 
 
-<h5>PMS:</h5>
-<ul>
-  <!--<li *ngFor="let pmUser of pmUsers">-->
-    <!--{{pmUser.name}}-->
-  <!--</li>-->
+<h3>Private Messages</h3>
+<ul class="list-group">
+  <li class="list-group-item noHover noPad" *ngFor="let pmUser of pmUsers">
+    <div class="message">
+      <div class="info">
+        <span class="sender">{{pmUser.sender}}</span>
+        <span class="time">{{pmUser.time}}</span>
+      </div>
+      <div class="context">
+        <div class="text">{{pmUser.msg}}</div>
+      </div>
+    </div>
+  </li>
 </ul>

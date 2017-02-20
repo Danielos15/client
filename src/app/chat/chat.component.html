@@ -1,4 +1,4 @@
-<div class="rooms">
+<div id="rooms">
   <div class="activeRooms">
     <app-room [activeRoom]="activeRoom" (notify)="onNotify($event)" ></app-room>
   </div>
@@ -6,11 +6,12 @@
 
 <div id="chat">
   <div class="chatWindow">
-
-    <div *ngIf="activeRoom !== undefined" class="messages">
+    <h3 *ngIf="activeRoom !== undefined">{{activeRoom}}</h3>
+    <div #scrollMe *ngIf="activeRoom !== undefined" class="messages">
       <div class="message" *ngFor="let msg of chat">
         <div class="info">
           <span class="sender">{{msg['nick']}}</span>
+          <span class="wrote">wrote at</span>
           <span class="time">{{msg['timestamp']}}</span>
         </div>
         <div class="context">
@@ -20,16 +21,16 @@
     </div>
 
     <app-room-list *ngIf="activeRoom === undefined" (notify)="onNotify($event)" ></app-room-list>
-    <app-user-list *ngIf="activeRoom === undefined" (notify)="onNotify($event)" ></app-user-list>
 
   </div>
-  <div class="chatInput">
+  <div *ngIf="activeRoom" class="chatInput">
     <input *ngIf="activeRoom" [(ngModel)]="message" (keyup.enter)='sendMessage()'>
-    <button *ngIf="activeRoom" (click)="sendMessage()">Send</button>
+    <button class="btn btn-default" *ngIf="activeRoom" (click)="sendMessage()">Send</button>
   </div>
 </div>
 
 <div id="users">
-  <app-user [activeRoom]="activeRoom"></app-user>
+  <app-user *ngIf="activeRoom" [activeRoom]="activeRoom"></app-user>
+  <app-user-list *ngIf="activeRoom === undefined" (notify)="onNotify($event)" ></app-user-list>
 </div>
 

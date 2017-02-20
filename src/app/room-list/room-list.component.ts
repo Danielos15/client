@@ -23,17 +23,23 @@ export class RoomListComponent implements OnInit {
   }
 
   onNewRoom() {
-    this.chatService.addRoom(this.newRoom, this.newPass).subscribe(success => {
-      if (success) {
-        this.notify.emit(this.newRoom);
-      }
-    });
+    // Check if roomname is not empty string
+    if (this.newRoom.length > 0) {
+      this.chatService.addRoom(this.newRoom, this.newPass).subscribe(success => {
+        if (success) {
+          this.notify.emit(this.newRoom);
+        }
+      });
+    }
   }
   joinRoom(roomName: string) {
-    this.chatService.joinRoom(roomName, this.newPass).subscribe(success => {
-      if (success) {
-        this.notify.emit(roomName);
-      }
-    });
+    // Check if room exists
+    if (this.rooms.indexOf(roomName) > -1) {
+      this.chatService.joinRoom(roomName, this.newPass).subscribe(success => {
+        if (success) {
+          this.notify.emit(roomName);
+        }
+      });
+    }
   }
 }

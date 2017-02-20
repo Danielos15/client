@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 export class UserComponent implements OnInit {
   @Input() activeRoom: string;
   users: string[];
+  ops: string[];
 
   constructor(
     private chatService: ChatService,
@@ -17,7 +18,12 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this.chatService.getUsersInRoom().subscribe(obj => {
+      if (obj.room === this.activeRoom) {
+        this.users = obj.users;
+        this.ops = obj.ops;
+      }
+    });
   }
 
 }

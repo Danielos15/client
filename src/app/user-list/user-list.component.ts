@@ -10,7 +10,7 @@ import {ModalComponent} from '../modal/modal.component';
 })
 export class UserListComponent implements OnInit {
   users: string[];
-  pmUsers: any;
+  pmUsers: string[];
   message: string;
   pmName: string;
 
@@ -23,21 +23,12 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.pmUsers = {};
     this.chatService.updateAllUsers();
     this.chatService.getUsers().subscribe(lst => {
       this.users = lst;
     });
 
-    this.chatService.getPrivateMessage().subscribe(obj => {
-      this.addPMUser(obj['sender']);
-
-      let msg = {
-        timestamp: new Date(),
-        msg: obj['msg']
-      };
-      // this.pmUsers[this.pmUsers.indexOf(obj['sender'])].messages.push(msg);
-    });
+    this.pmUsers = this.chatService.getPMs();
   }
 
   openDialog(username: string) {
@@ -50,24 +41,12 @@ export class UserListComponent implements OnInit {
       nick: this.pmName,
       message: this.message
     };
-
     this.chatService.sendPrivateMessage(data).subscribe( success => {
       if (success) {
-        this.addPMUser(this.pmName);
         this.modal.hide();
         this.message = '';
       }
     })
-  }
-
-  private addPMUser(username) {
-    if (this.pmUsers[username] === undefined) {
-      let user = {
-        name: username,
-        messages: []
-      };
-      this.pmUsers[username] = user;
-    }
   }
 
 }

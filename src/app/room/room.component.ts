@@ -25,9 +25,11 @@ export class RoomComponent implements OnInit {
   openRoom(roomName: string) {
     this.activeRoom = roomName;
     this.notify.emit(roomName);
+    this.chatService.updateUsersInRoom(roomName);
   }
 
-  leaveRoom(roomName: string) {
+  leaveRoom(roomName: string, event) {
+    event.stopImmediatePropagation();
     this.chatService.leaveRoom(roomName).subscribe();
     if (roomName === this.activeRoom) {
       this.seeRooms();

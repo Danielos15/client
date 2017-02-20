@@ -1,6 +1,9 @@
-<h3>Current Room: {{activeRoom}}</h3>
-<ul>
-  <li *ngFor="let user of users" >
-    <p>{{user}}</p>
+<h3>Members</h3>
+<ul class="list-group">
+  <li class="list-group-item op" *ngFor="let user of ops" >
+    {{user}}
+  </li>
+  <li class="list-group-item user" *ngFor="let user of users" >
+    {{user}}
   </li>
 </ul>

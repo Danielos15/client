@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import {ChatService} from '../chat.service';
 import {Router} from '@angular/router';
-import {RoomComponent} from '../room/room.component';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
-
+export class ChatComponent implements OnInit, AfterViewChecked {
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   activeRoom: string;
   message: string;
   chat: any;
@@ -48,12 +47,14 @@ export class ChatComponent implements OnInit {
         this.chat = ret;
       }
     });
+    this.scrollToBottom();
   }
 
   onNotify(roomName: string) {
     this.activeRoom = roomName;
     if (roomName !== undefined) {
       this.chatService.getChat(roomName);
+      this.scrollToBottom();
     } else {
       // Clear chat since there is no active room
       this.chat = [];
@@ -67,5 +68,16 @@ export class ChatComponent implements OnInit {
     };
     this.chatService.sendMessage(params);
     this.message = '';
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
   }
 }

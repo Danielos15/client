@@ -7,12 +7,15 @@ export class ChatService {
   socket: any;
   private currentRoom: string;
   private currentName: string;
+  private privateMessages : any;
 
   constructor() {
     this.socket = io('http://localhost:8080/');
     this.socket.on('connect', function() {
       console.log('Connection');
     });
+    this.privateMessages = [];
+    this.getPrivateMessage();
   }
 
   getCurrentUser() {
@@ -60,8 +63,33 @@ export class ChatService {
     });
   }
 
-  getUsersByRoom(roomName: string) {
-    this.socket.emit('usersinroom', roomName);
+  updateUsersInRoom(room) {
+    this.socket.emit('displayroom', room);
+  }
+
+  getUsersInRoom(): Observable<any> {
+    return new Observable(obs => {
+      this.socket.on('updateusers', (roomName, users, ops) => {
+        const usrs: string[] = [];
+        for (const name in users) {
+          if (users.hasOwnProperty(name)) {
+            usrs.push(name);
+          }
+        }
+        const op: string[] = [];
+        for (const name in ops) {
+          if (ops.hasOwnProperty(name)) {
+            op.push(name);
+          }
+        }
+        const ret = {
+          room: roomName,
+          users: usrs,
+          ops: op
+        };
+        obs.next(ret);
+      });
+    });
   }
   getUsers(): Observable<string[]> {
     return new Observable(observer => {
@@ -124,16 +152,25 @@ export class ChatService {
     });
   }
 
-  getPrivateMessage(): Observable<Object> {
-    return new Observable(obs => {
+  getPrivateMessage() {
+    let obs = new Observable(obs => {
       this.socket.on('recv_privatemsg', (username, msg) => {
         const ret = {
           sender: username,
+          time: this.getDateTimeFormat(),
           msg: msg
         };
         obs.next(ret);
       });
     });
+
+    obs.subscribe( obj => {
+      this.privateMessages.push(obj);
+    })
+  }
+
+  getPMs() {
+    return this.privateMessages;
   }
 
   updateChat(): Observable<Object> {
@@ -152,4 +189,14 @@ export class ChatService {
     this.socket.emit('getchat', room);
   }
 
+  getDateTimeFormat(d = new Date) {
+    const date: string = d.toLocaleString(window.navigator.language, {month: 'short'})
+      + '-'
+      + d.getDate()
+      + ' '
+      + d.getHours()
+      + ':'
+      + d.getMinutes();
+    return date;
+  }
 }
