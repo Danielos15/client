@@ -14,6 +14,7 @@ export class ChatService {
     this.socket.on('connect', function() {
       console.log('Connection');
     });
+
     this.privateMessages = [];
     this.getPrivateMessage();
   }
