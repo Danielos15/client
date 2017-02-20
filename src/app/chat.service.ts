@@ -220,7 +220,7 @@ export class ChatService {
     return new Observable(obs => {
       this.socket.emit('ban', params, success => {
         obs.next(success);
-      };
+      });
     });
 
   }

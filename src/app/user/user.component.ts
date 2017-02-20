@@ -37,7 +37,7 @@ export class UserComponent implements OnInit {
     event.stopImmediatePropagation();
   }
 
-  ban(username: string, event: an) {
+  ban(username: string, event: any) {
     this.chatService.ban(username, this.activeRoom).subscribe();
     event.stopImmediatePropagation();
   }
