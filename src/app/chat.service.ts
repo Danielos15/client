@@ -10,7 +10,7 @@ export class ChatService {
   private privateMessages : any;
 
   constructor() {
-    this.socket = io('http://localhost:8080/');
+    this.socket = io('http://danielos15.eu-2.evennode.com/');
     this.socket.on('connect', function() {
       console.log('Connection');
     });
