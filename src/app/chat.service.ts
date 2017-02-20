@@ -12,7 +12,9 @@ export class ChatService {
   private openDialogs: string[];
 
   constructor() {
-    this.socket = io('http://localhost:8080');
+    // this.socket = io('http://localhost:8080');
+    this.socket = io('https://danielos15.eu-2.evennode.com');
+
     this.socket.on('connect', function() {
       console.log('Connection');
     });
