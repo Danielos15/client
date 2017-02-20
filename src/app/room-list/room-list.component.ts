@@ -11,6 +11,7 @@ export class RoomListComponent implements OnInit {
   newRoom: string;
   newPass: string;
   @Output() notify: EventEmitter<string> = new EventEmitter<string>();
+  reason: string;
 
   constructor(
     private chatService: ChatService
@@ -24,22 +25,28 @@ export class RoomListComponent implements OnInit {
 
   onNewRoom() {
     // Check if roomname is not empty string
-    if (this.newRoom.length > 0) {
-      this.chatService.addRoom(this.newRoom, this.newPass).subscribe(success => {
-        if (success) {
-          this.notify.emit(this.newRoom);
+    this.joinRoom(this.newRoom);
+  }
+  joinRoom(roomName: string) {
+    // Check if room exists
+    if (roomName.length > 0) {
+      this.chatService.joinRoom(roomName, this.newPass).subscribe(ret => {
+        if (ret['success']) {
+          this.notify.emit(roomName);
+        } else {
+          if (ret['reason'] === 'banned') {
+            this.notification(roomName);
+          }
         }
       });
     }
   }
-  joinRoom(roomName: string) {
-    // Check if room exists
-    if (this.rooms.indexOf(roomName) > -1) {
-      this.chatService.joinRoom(roomName, this.newPass).subscribe(success => {
-        if (success) {
-          this.notify.emit(roomName);
-        }
-      });
-    }
+
+  notification(room: string) {
+    // TODO: handle all errors.
+    this.reason = 'You are banned from ' + room;
+    setTimeout(() => {
+      this.reason = '';
+    }, 5000);
   }
 }

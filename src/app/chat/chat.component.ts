@@ -15,6 +15,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   pMessage: string;
   chat: any;
   pm: any;
+  notification: string;
 
   constructor(
     private chatService: ChatService,
@@ -50,11 +51,38 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.chat = ret;
       }
     });
+
+    this.chatService.kicked().subscribe(obj => {
+      if (obj['kicked'] === this.chatService.getCurrentUser()) {
+        if (obj['room'] === this.activeRoom) {
+          this.activeRoom = undefined;
+        }
+
+        this.displayNotification('You where kicked by ' + obj['kicker'] + ' from ' + obj['room']);
+      }
+    });
+
+    this.chatService.banned().subscribe(obj => {
+      if (obj['banned'] === this.chatService.getCurrentUser()) {
+        if (obj['room'] === this.activeRoom) {
+          this.activeRoom = undefined;
+        }
+
+        this.displayNotification('You where banned by ' + obj['banner'] + ' from ' + obj['room']);
+      }
+    });
+
     this.pm = this.chatService.pm;
 
     this.scrollToBottom();
   }
 
+  displayNotification(notification: string) {
+    this.notification = notification;
+    setTimeout( () => {
+      this.notification = '';
+    }, 5000);
+  }
   onNotify(roomName: string) {
     this.activeRoom = roomName;
     if (roomName !== undefined) {

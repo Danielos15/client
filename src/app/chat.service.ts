@@ -99,20 +99,20 @@ export class ChatService {
     this.socket.emit('users');
   }
 
-  addRoom(roomName: string, pass: string): Observable<boolean> {
+  joinRoom(roomName: string, pass: string): Observable<Object> {
     return new Observable(observer => {
       const param = {
         room: roomName,
         pass: pass
       };
       this.socket.emit('joinroom', param, (success, b) => {
-        observer.next(success);
+        const obj = {
+          success: success,
+          reason: b
+        };
+        observer.next(obj);
       });
     });
-  }
-
-  joinRoom(roomName: string, pass: string): Observable<boolean> {
-    return this.addRoom(roomName, pass);
   }
 
   leaveRoom(roomName: string) {
@@ -223,6 +223,32 @@ export class ChatService {
       });
     });
 
+  }
+
+  banned(): Observable<Object> {
+    return new Observable(obs => {
+      this.socket.on('banned', (room, user, bannedBy) => {
+        const ret = {
+          room: room,
+          banned: user,
+          banner: bannedBy
+        };
+        obs.next(ret);
+      });
+    });
+  }
+
+  kicked(): Observable<Object> {
+    return new Observable(obs => {
+      this.socket.on('kicked', (room, user, kickedBy) => {
+        const ret = {
+          room: room,
+          kicked: user,
+          kicker: kickedBy
+        };
+        obs.next(ret);
+      });
+    });
   }
 
   getDateTimeFormat(d = new Date) {

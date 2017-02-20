@@ -1,3 +1,6 @@
+<div class="notification alert alert-warning" *ngIf="notification">
+  {{notification}}
+</div>
 <div id="rooms">
   <div class="activeRooms">
     <app-room [activeRoom]="activeRoom" (notify)="onNotify($event)" ></app-room>
@@ -31,6 +34,6 @@
 
 <div id="users">
   <app-user *ngIf="activeRoom" [activeRoom]="activeRoom"></app-user>
-  <app-user-list *ngIf="activeRoom === undefined" (notify)="onNotify($event)" ></app-user-list>
+  <app-user-list *ngIf="activeRoom === undefined" ></app-user-list>
 </div>
 

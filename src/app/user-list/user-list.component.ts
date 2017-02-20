@@ -21,6 +21,7 @@ export class UserListComponent implements OnInit {
   }
 
   openDialog(username: string) {
+    // TODO: Open dialog instant.
     this.chatService.addPmUser(username);
   }
 

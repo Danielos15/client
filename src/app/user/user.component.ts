@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {ChatService} from '../chat.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user',

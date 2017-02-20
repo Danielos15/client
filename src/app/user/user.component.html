@@ -3,14 +3,14 @@
   <li class="list-group-item op" *ngFor="let user of ops" >
     Op:{{user}}
     <div *ngIf="isOp && user !== currUser" class="options">
-      <i title="kick" class="fa fa-sign-out" (click)="kick(user)"></i>
-      <i title="ban" class="fa fa-ban" (click)="ban(user)"></i>
+      <i title="kick" class="fa fa-sign-out" (click)="kick(user, $event)"></i>
+      <i title="ban" class="fa fa-ban" (click)="ban(user, $event)"></i>
     </div>
   </li>
   <li class="list-group-item user" *ngFor="let user of users" >
     {{user}}
     <div *ngIf="isOp && user !== currUser" class="options">
-      <i title="kick" class="fa fa-sign-out" (click)="kick(user)"></i>
-      <i title="ban" class="fa fa-ban" (click)="ban(user)"></i>
+      <i title="kick" class="fa fa-sign-out" (click)="kick(user, $event)"></i>
+      <i title="ban" class="fa fa-ban" (click)="ban(user, $event)"></i>
     </div>
 </ul>
